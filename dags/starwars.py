@@ -3,11 +3,10 @@ from datetime import datetime
 import random
 import httpx
 import psycopg2
-
+import os
 from airflow.sdk import DAG, task
 
-CONN = "postgresql://user:password@ep-xxxx.eu-central-1.aws.neon.tech/webshops?sslmode=require"
-
+CONN = os.environ["NEON_CONN"]
 
 with DAG(
     dag_id="starwars_postgres_log",
