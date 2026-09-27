@@ -1,0 +1,20 @@
+services:
+  airflow:
+    build: .
+    image: airflow-dbt:local
+    container_name: airflow-dbt
+    ports:
+      - "8080:8080"
+    environment:
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__CORE__LOAD_EXAMPLES: "False"
+      AIRFLOW__CORE__TEST_CONNECTION: Enabled
+      AIRFLOW__CORE__SIMPLE_AUTH_MANAGER_USERS: "ogi:admin"
+      AIRFLOW__CORE__SIMPLE_AUTH_MANAGER_PASSWORDS_FILE: /opt/airflow/auth/passwords.json
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./logs:/opt/airflow/logs
+      - ./auth:/opt/airflow/auth
+      - ./dbt:/opt/airflow/dbt
+    restart: unless-stopped
+    command: standalone

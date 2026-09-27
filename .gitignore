@@ -1,0 +1,22 @@
+# Secrets
+.env
+auth/
+dbt/profiles.yml
+
+# logs
+logs/
+
+# dbt generated files
+dbt/target/
+dbt/logs/
+dbt/dbt_packages/
+
+# Python in Airflow
+# Python automatically creates __pycache__/ and .pyc files when running Python code
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# IDE / OS
+.vscode/
+Thumbs.db
