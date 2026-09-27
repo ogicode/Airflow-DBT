@@ -1,0 +1,23 @@
+webshops:
+  target: dev
+  outputs:
+    dev:
+      type: postgres
+      host: ep-floral-water-agqhui05-pooler.c-2.eu-central-1.aws.neon.tech
+      user: neondb_owner
+      password: "{{ env_var('NEON_PASSWORD') }}"      
+      dbname: webshops
+      schema: public
+      port: 5432
+      sslmode: require
+      threads: 4
+    ci:
+      type: postgres
+      host: ep-floral-water-agqhui05-pooler.c-2.eu-central-1.aws.neon.tech
+      user: neondb_owner
+      password: "{{ env_var('NEON_PASSWORD') }}"
+      dbname: webshops
+      schema: public
+      port: 5432
+      sslmode: require
+      threads: 4

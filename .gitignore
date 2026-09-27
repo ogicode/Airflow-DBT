@@ -1,7 +1,6 @@
 # Secrets
 .env
 auth/
-dbt/profiles.yml
 
 # logs
 logs/
