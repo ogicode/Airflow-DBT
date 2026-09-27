@@ -1,0 +1,1 @@
+select current_database(), count(*) from bronze.customers;

@@ -1,0 +1,12 @@
+name: webshops
+version: "1.0"
+profile: webshops
+
+models:
+  webshops:
+    silver:
+      +schema: silver
+      +materialized: table
+    gold:
+      +schema: gold
+      +materialized: table
