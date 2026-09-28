@@ -13,5 +13,6 @@ with DAG(
 
     dbt_build = BashOperator(
         task_id="dbt_build",
+        # run dbt
         bash_command="/home/airflow/dbt_venv/bin/dbt build --project-dir /opt/airflow/dbt --profiles-dir /opt/airflow/dbt",
     ) 
