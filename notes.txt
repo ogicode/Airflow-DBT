@@ -1,5 +1,0 @@
-vs code
-Open Chat: Ctrl + Alt + I
-Show All Commands: Ctrl + Shift + P
-Start Debugging: F5
-
