@@ -1,1 +1,1 @@
-select count(*) from gold.fact_order_lines;
+select * from bronze.customers limit 10;

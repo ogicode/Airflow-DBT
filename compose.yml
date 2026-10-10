@@ -17,5 +17,6 @@ services:
       - ./logs:/opt/airflow/logs
       - ./auth:/opt/airflow/auth
       - ./dbt:/opt/airflow/dbt
+      - ./data:/opt/airflow/data
     restart: unless-stopped
     command: standalone

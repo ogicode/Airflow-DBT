@@ -1,8 +1,18 @@
-# Runs the dbt project daily: builds silver and gold models and runs tests.
 from datetime import datetime
 
+import psycopg
 from airflow.sdk import DAG
 from airflow.providers.standard.operators.bash import BashOperator
+from airflow.providers.standard.operators.python import PythonOperator
+
+
+def load_csv():
+    with psycopg.connect("postgresql://neondb_owner:PASSWORD@ep-floral-water-agqhui05-pooler.c-2.eu-central-1.aws.neon.tech/webshops?sslmode=require") as conn:
+        with conn.cursor() as cur:
+            cur.execute("truncate bronze.customers")
+            with open("/opt/airflow/data/customers.csv") as f, cur.copy("copy bronze.customers from stdin with (format csv, header true)") as copy:
+                copy.write(f.read())
+
 
 with DAG(
     dag_id="dbt_webshops",
@@ -11,8 +21,11 @@ with DAG(
     catchup=False,
 ) as dag:
 
+    load = PythonOperator(task_id="load_csv", python_callable=load_csv)
+
     dbt_build = BashOperator(
         task_id="dbt_build",
-        # run dbt
         bash_command="/home/airflow/dbt_venv/bin/dbt build --project-dir /opt/airflow/dbt --profiles-dir /opt/airflow/dbt",
-    ) 
+    )
+
+    load >> dbt_build
