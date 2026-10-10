@@ -15,5 +15,15 @@ jobs:
           python-version: "3.12"
       - run: pip install dbt-postgres
       - run: dbt build --target ci --project-dir dbt --profiles-dir dbt
-        env:
-          NEON_PASSWORD: ${{ secrets.NEON_PASSWORD }}
+    env:
+      NEON_HOST: ${{ secrets.NEON_HOST }}
+      NEON_PASSWORD: ${{ secrets.NEON_PASSWORD }}
+
+  dags:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m py_compile dags/*.py
