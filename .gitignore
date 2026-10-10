@@ -4,6 +4,7 @@ auth/
 notes.txt
 todo.txt
 neon.txt
+.neon
 
 # logs
 logs/
