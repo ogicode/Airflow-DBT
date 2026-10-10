@@ -1,1 +1,1 @@
-select * from bronze.customers limit 10;
+   select * from bronze.customers;
