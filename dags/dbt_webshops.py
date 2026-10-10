@@ -7,7 +7,7 @@ from airflow.providers.standard.operators.python import PythonOperator
 
 def load_csv():
     with psycopg.connect(
-        host="ep-floral-water-agqhui05-pooler.c-2.eu-central-1.aws.neon.tech",
+        host=os.environ["NEON_HOST"],
         dbname="webshops",
         user="neondb_owner",
         password=os.environ["NEON_PASSWORD"],

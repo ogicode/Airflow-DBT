@@ -5,7 +5,7 @@ webshops:
   outputs:
     dev:
       type: postgres
-      host: ep-floral-water-agqhui05-pooler.c-2.eu-central-1.aws.neon.tech
+      host: "{{ env_var('NEON_HOST') }}"
       user: neondb_owner
       password: "{{ env_var('NEON_PASSWORD') }}"      
       dbname: webshops
@@ -16,7 +16,7 @@ webshops:
 # github actions
     ci:
       type: postgres
-      host: ep-floral-water-agqhui05-pooler.c-2.eu-central-1.aws.neon.tech
+      host: "{{ env_var('NEON_HOST') }}"
       user: neondb_owner
       password: "{{ env_var('NEON_PASSWORD') }}"
       dbname: webshops
