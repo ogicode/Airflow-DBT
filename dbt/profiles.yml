@@ -1,4 +1,6 @@
+# connections
 webshops:
+# localy
   target: dev
   outputs:
     dev:
@@ -11,6 +13,7 @@ webshops:
       port: 5432
       sslmode: require
       threads: 4
+# github actions
     ci:
       type: postgres
       host: ep-floral-water-agqhui05-pooler.c-2.eu-central-1.aws.neon.tech

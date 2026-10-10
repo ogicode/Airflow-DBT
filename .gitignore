@@ -1,6 +1,8 @@
 # Secrets
 .env
 auth/
+notes.txt
+todo.txt
 
 # logs
 logs/

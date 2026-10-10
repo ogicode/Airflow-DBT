@@ -6,7 +6,7 @@ def say_hello():
     print("Hello, world!")
 
 with DAG(
-    dag_id="hello_world",
+    dag_id="hello",
     start_date=datetime(2026, 1, 1),
     schedule=None,
     catchup=False,
