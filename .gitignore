@@ -23,4 +23,6 @@ __pycache__/
 
 # IDE / OS
 .vscode/
-Thumbs.db
+Thumbs.db.neon
+.neon
+.neon
