@@ -1,18 +1,22 @@
 from datetime import datetime
-
+import os
 import psycopg
 from airflow.sdk import DAG
 from airflow.providers.standard.operators.bash import BashOperator
 from airflow.providers.standard.operators.python import PythonOperator
 
-
 def load_csv():
-    with psycopg.connect("postgresql://neondb_owner:PASSWORD@ep-floral-water-agqhui05-pooler.c-2.eu-central-1.aws.neon.tech/webshops?sslmode=require") as conn:
+    with psycopg.connect(
+        host="ep-floral-water-agqhui05-pooler.c-2.eu-central-1.aws.neon.tech",
+        dbname="webshops",
+        user="neondb_owner",
+        password=os.environ["NEON_PASSWORD"],
+        sslmode="require",
+    ) as conn:
         with conn.cursor() as cur:
             cur.execute("truncate bronze.customers")
             with open("/opt/airflow/data/customers.csv") as f, cur.copy("copy bronze.customers from stdin with (format csv, header true)") as copy:
                 copy.write(f.read())
-
 
 with DAG(
     dag_id="dbt_webshops",
