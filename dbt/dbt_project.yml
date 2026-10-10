@@ -1,10 +1,14 @@
+# organises transformation files
 name: webshops
 version: "1.0"
 profile: webshops
 
+# schemas
 models:
   webshops:
+    # models silver folder
     silver:
+    # save files as tables
       +schema: silver
       +materialized: table
     gold:

@@ -1,0 +1,13 @@
+main usecases
+Transformations: turning raw data into clean tables (staging → marts).
+Data quality: tests that catch bad data before it reaches dashboards.
+Documentation: auto-generated docs and a lineage graph of how tables connect.
+Dependency management: ref() builds models in the right order automatically.
+Version control and CI/CD: SQL lives in git, gets reviewed and deploys like code.
+Incremental loads: processing only new rows instead of rebuilding everything.
+Reusable logic: macros for SQL you’d otherwise copy-paste.
+
+tests
+dbt is used for tests (no nulls, unique IDs, accepted_values: only allowed values, e.g. status in (‘paid’, ‘shipped’).
+relationships: foreign keys exist in the other table, e.g. every order.customer_id is in customers)
+

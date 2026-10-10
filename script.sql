@@ -1,0 +1,1 @@
+select count(*) from gold.fact_order_lines;
