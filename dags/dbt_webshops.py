@@ -10,6 +10,7 @@ def load_csv():
         host=os.environ["NEON_HOST"],
         dbname="webshops",
         user="neondb_owner",
+        # from docker container in auth
         password=os.environ["NEON_PASSWORD"],
         sslmode="require",
     ) as conn:

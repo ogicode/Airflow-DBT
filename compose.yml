@@ -3,7 +3,7 @@ services:
     build: .
     image: airflow-dbt:local
     container_name: airflow-dbt
-    env_file: .env
+    env_file: auth/.env
     ports:
       - "8080:8080"
     environment:
@@ -12,6 +12,9 @@ services:
       AIRFLOW__CORE__TEST_CONNECTION: Enabled
       AIRFLOW__CORE__SIMPLE_AUTH_MANAGER_USERS: "ogi:admin"
       AIRFLOW__CORE__SIMPLE_AUTH_MANAGER_PASSWORDS_FILE: /opt/airflow/auth/passwords.json
+      NEON_CONN: ${NEON_CONN}
+      NEON_PASSWORD: ${NEON_PASSWORD}
+      NEON_HOST: ${NEON_HOST}
     volumes:
       - ./dags:/opt/airflow/dags
       - ./logs:/opt/airflow/logs
