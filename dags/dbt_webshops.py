@@ -1,24 +1,39 @@
 from datetime import datetime
 import os
+import subprocess
 import psycopg
 from airflow.sdk import DAG
-from airflow.providers.standard.operators.bash import BashOperator
 from airflow.providers.standard.operators.python import PythonOperator
 
+# load csv to bronze
 def load_csv():
+    # connect
     with psycopg.connect(
         host=os.environ["NEON_HOST"],
         dbname="webshops",
         user="neondb_owner",
-        # from docker container in auth
         password=os.environ["NEON_PASSWORD"],
         sslmode="require",
     ) as conn:
         with conn.cursor() as cur:
+            # empty bronze
             cur.execute("truncate bronze.customers")
+            # add csv to bronze
             with open("/opt/airflow/data/customers.csv") as f, cur.copy("copy bronze.customers from stdin with (format csv, header true)") as copy:
                 copy.write(f.read())
 
+# run dbt
+def run_dbt():
+    subprocess.run(
+        [
+            "/home/airflow/dbt_venv/bin/dbt", "build",
+            "--project-dir", "/opt/airflow/dbt",
+            "--profiles-dir", "/opt/airflow/dbt",
+        ],
+        check=True,
+    )
+
+# dag specs
 with DAG(
     dag_id="dbt_webshops",
     start_date=datetime(2025, 1, 1),
@@ -27,10 +42,6 @@ with DAG(
 ) as dag:
 
     load = PythonOperator(task_id="load_csv", python_callable=load_csv)
-
-    dbt_build = BashOperator(
-        task_id="dbt_build",
-        bash_command="/home/airflow/dbt_venv/bin/dbt build --project-dir /opt/airflow/dbt --profiles-dir /opt/airflow/dbt",
-    )
+    dbt_build = PythonOperator(task_id="dbt_build", python_callable=run_dbt)
 
     load >> dbt_build
