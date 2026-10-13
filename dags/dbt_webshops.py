@@ -27,7 +27,9 @@ def run_dbt():
     subprocess.run(
         [
             "/home/airflow/dbt_venv/bin/dbt", "build",
+            # dbt_project.yml
             "--project-dir", "/opt/airflow/dbt",
+            # profiles.yml
             "--profiles-dir", "/opt/airflow/dbt",
         ],
         check=True,
