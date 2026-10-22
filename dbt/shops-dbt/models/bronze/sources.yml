@@ -5,4 +5,20 @@ sources:
     schema: shop
     tables:
       - name: customers
+        columns:
+          - name: customer_id
+            data_tests: [not_null, unique]
+          - name: name
+            data_tests:
+              - not_null:
+                  config:
+                    severity: warn
       - name: orders
+        columns:
+          - name: order_id
+            data_tests: [not_null, unique]
+          - name: amount
+            data_tests:
+              - not_null:
+                  config:
+                    severity: warn
