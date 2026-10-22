@@ -3,6 +3,8 @@ version: 2
 models:
   - name: customer_revenue
     columns:
+      - name: customer_id
+        tests: [not_null, unique]
       - name: name
         tests: [not_null]
       - name: revenue

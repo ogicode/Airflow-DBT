@@ -1,6 +1,7 @@
 select
+    c.customer_id,
     c.name,
-    sum(o.amount) as revenue
+    coalesce(sum(o.amount), 0) as revenue
 from {{ ref('silver_customers') }} c
-join {{ ref('silver_orders') }} o on o.customer_id = c.customer_id
-group by c.name
+left join {{ ref('silver_orders') }} o on o.customer_id = c.customer_id
+group by c.customer_id, c.name
