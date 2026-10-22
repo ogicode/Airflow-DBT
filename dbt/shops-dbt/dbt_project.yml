@@ -13,3 +13,7 @@ models:
     gold:
       +materialized: table
       +schema: gold
+
+# turn off anonymus tracking
+flags:
+  send_anonymous_usage_stats: false
