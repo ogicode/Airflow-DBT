@@ -1,0 +1,20 @@
+# organises transformation files
+# makes models with dbt init
+name: webshops
+version: "1.0"
+profile: webshops
+
+# schemas
+models:
+  webshops:
+    # models silver folder
+    silver:
+    # save files as tables
+      +schema: silver
+      +materialized: table
+    gold:
+      +schema: gold
+      +materialized: table
+
+flags:
+  send_anonymous_usage_stats: false

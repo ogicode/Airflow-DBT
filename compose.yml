@@ -1,0 +1,36 @@
+services:
+  airflow:
+    # builds from the Dockerfile in this folder
+    build: .
+    # names that build airflow-dbt with the tag local
+    image: airflow-dbt:local
+    container_name: airflow-dbt
+    # load as env vars from root .env
+    env_file: .env
+    # 8080 on PC to port 8080 inside the container
+    ports:
+      - "8080:8080"
+    # airflow specific settings
+    environment:
+      # runs tasks in parallel on one machine
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      # hide the example DAGs
+      AIRFLOW__CORE__LOAD_EXAMPLES: "False"
+      # test connectio to postgres and others stored in env
+      AIRFLOW__CORE__TEST_CONNECTION: Enabled
+      # user
+      AIRFLOW__CORE__SIMPLE_AUTH_MANAGER_USERS: "ogi:admin"
+      # passwords
+      AIRFLOW__CORE__SIMPLE_AUTH_MANAGER_PASSWORDS_FILE: /opt/airflow/auth/passwords.json
+    volumes:
+      # dags is in /opt/airflow/dags
+      - ./dags:/opt/airflow/dags
+      - ./logs:/opt/airflow/logs
+      - ./auth:/opt/airflow/auth
+      - ./dbt:/opt/airflow/dbt
+      - ./data:/opt/airflow/data
+    # Docker restarts the container automatically after a crash or a PC reboot, 
+    # unless you stopped it yourself with docker stop
+    restart: unless-stopped
+    # runs all of Airflow in one container
+    command: standalone

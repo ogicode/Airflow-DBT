@@ -1,0 +1,13 @@
+# project name
+name: shop
+# which entry in profiles.yml to use for the connection
+profile: shop
+# folder with the .sql models
+model-paths: ["models"]
+
+models:
+  # settings for all models in this project
+  shop:
+    # build each new model as a table (default is view)
+    # view is like a funciton. saves ssd costs cpu
+    +materialized: table

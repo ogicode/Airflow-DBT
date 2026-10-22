@@ -1,0 +1,25 @@
+# Secrets
+.env
+auth/
+notes.txt
+todo.txt
+neon.txt
+.neon
+
+# logs
+logs/
+
+# dbt generated files
+dbt/*/target/
+dbt/*/logs/
+dbt/*/dbt_packages/
+.user.yml
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# IDE / OS
+.vscode/
+Thumbs.db

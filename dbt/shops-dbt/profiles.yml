@@ -1,0 +1,11 @@
+shop:
+  target: dev
+  outputs:
+    dev:
+      type: postgres
+      host: host.docker.internal
+      port: 5433
+      user: postgres
+      password: "{{ env_var('LOCAL_PASSWORD') }}"
+      dbname: mydb
+      schema: shop

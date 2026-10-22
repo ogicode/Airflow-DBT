@@ -1,0 +1,29 @@
+both pandas and pyspark load data transform it and store it back, 
+where as dbt does operations inside psotgres or snowflake
+pandas is for ML, API calls
+
+main usecases
+Transformations: turning raw data into clean tables (staging → marts).
+Data quality: tests that catch bad data before it reaches dashboards.
+Documentation: auto-generated docs and a lineage graph of how tables connect.
+Dependency management: ref() builds models in the right order automatically.
+Version control and CI/CD: SQL lives in git, gets reviewed and deploys like code.
+Incremental loads: processing only new rows instead of rebuilding everything.
+Reusable logic: macros for SQL you’d otherwise copy-paste.
+
+tests
+dbt is used for tests (no nulls, unique IDs, accepted_values: only allowed values, e.g. status in (‘paid’, ‘shipped’).
+relationships: foreign keys exist in the other table, e.g. every order.customer_id is in customers)
+
+Silver (cleaned): Deduplicated, typed, validated, and joined data. One consistent, trustworthy version of each entity (e.g. clean orders and customers tables).
+Gold (business-ready): Aggregated, modeled data for reporting, such as star schemas, KPIs, and fact/dim tables that feed Power BI or Tableau.
+
+Modeling
+dim: who, what
+facat: action, atribute
+Anna bought 2 Tea Mugs for €39.98 on Sept 15
+Dims: Anna (who), Tea Mug (what), Sept 15 (when)
+Fact: bought (action), with measures qty = 2 and revenue = €39.98
+
+docker desktop stop
+docker desktop start

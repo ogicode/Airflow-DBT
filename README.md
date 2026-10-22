@@ -1,0 +1,77 @@
+# Airflow-DBT
+
+[![dbt CI](https://github.com/ogicode/Airflow-DBT/actions/workflows/dbt-ci.yml/badge.svg)](https://github.com/ogicode/Airflow-DBT/actions/workflows/dbt-ci.yml)
+
+A small webshop data pipeline: **dbt** transforms raw data in a Neon Postgres database into a star schema, **Airflow** runs it every day, and **GitHub Actions** tests every change.
+
+## Architecture
+
+```
+bronze (raw)          silver (cleaned)       gold (star schema)
+─────────────         ────────────────       ──────────────────
+customers     ──►     customers       ──►    dim_customer
+products      ──►     products        ──►    dim_product
+orders        ──►     orders          ─┐     dim_date
+order_lines   ──►     order_lines     ─┴──►  fact_order_lines
+```
+
+All three layers are schemas in one Postgres database, `webshops`.
+
+- **bronze**: raw source tables, loaded outside dbt.
+- **silver**: typed, trimmed and de-duplicated copies of bronze.
+- **gold**: dimensions and a fact table with revenue per order line (`qty * price`).
+
+## Project layout
+
+```
+dags/
+  dbt_webshops.py        Daily DAG that runs `dbt build`
+dbt/
+  dbt_project.yml
+  profiles.yml           `dev` and `ci` targets (password via env var)
+  macros/
+    generate_schema_name.sql   Uses custom schema names; prefixes `ci_` on the ci target
+  models/
+    silver/              Cleaning models + sources.yml + tests
+    gold/                Star schema models + tests
+.github/workflows/
+  dbt-ci.yml             Runs `dbt build --target ci` on push and PR
+compose.yml, Dockerfile  Airflow 3 with dbt in its own virtualenv
+```
+
+## Setup
+
+1. Create a `.env` file in the project root:
+
+   ```
+   NEON_PASSWORD=<your Neon password>
+   ```
+
+2. Start Airflow:
+
+   ```
+   docker compose up -d --build
+   ```
+
+3. Open http://localhost:8080 and log in as `ogi`. The password is in `auth/passwords.json`.
+
+## Running dbt manually
+
+```
+docker exec airflow-dbt /home/airflow/dbt_venv/bin/dbt build --project-dir /opt/airflow/dbt --profiles-dir /opt/airflow/dbt
+```
+
+Use `run --select silver`, `run --select gold` or `test` instead of `build` to run just one part.
+
+## Scheduling
+
+The `dbt_webshops` DAG runs `dbt build` daily at midnight. It builds silver, then gold, and runs the tests in between. If any test fails, the task goes red in the Airflow UI.
+
+## Tests
+
+- `unique` and `not_null` on every primary key in silver and gold.
+- `relationships` checks that every `product_id` and `customer_id` in `fact_order_lines` exists in its dimension.
+
+## CI
+
+Every push to `main` and every pull request runs `dbt build --target ci` on GitHub Actions. The `ci` target writes to `ci_silver` and `ci_gold`, so CI never touches the real tables. It needs a repository secret named `NEON_PASSWORD`.

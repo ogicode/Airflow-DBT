@@ -1,0 +1,6 @@
+name: jayzern
+version: "1.0.0"
+profile: jayzern
+
+model-paths: ["models"]
+macro-paths: ["macros"]

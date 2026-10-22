@@ -1,0 +1,23 @@
+version: 2
+
+models:
+  - name: dim_customer
+    columns:
+      - name: customer_id
+        tests: [unique, not_null]
+  - name: dim_product
+    columns:
+      - name: product_id
+        tests: [unique, not_null]
+  - name: fact_order_lines
+    columns:
+      - name: product_id
+        tests:
+          - relationships:
+              to: ref('dim_product')
+              field: product_id
+      - name: customer_id
+        tests:
+          - relationships:
+              to: ref('dim_customer')
+              field: customer_id
