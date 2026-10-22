@@ -13,6 +13,9 @@ models:
     gold:
       +materialized: table
       +schema: gold
+    quality:
+      +materialized: table
+      +schema: quality
 
 # turn off anonymus tracking
 flags:
