@@ -1,0 +1,9 @@
+version: 2
+
+models:
+  - name: customer_revenue
+    columns:
+      - name: name
+        tests: [not_null]
+      - name: revenue
+        tests: [not_null]

@@ -1,0 +1,15 @@
+version: 2
+
+models:
+  - name: silver_customers
+    columns:
+      - name: customer_id
+        tests: [not_null, unique]
+  - name: silver_orders
+    columns:
+      - name: customer_id
+        tests:
+          - not_null
+          - relationships:
+              to: ref('silver_customers')
+              field: customer_id

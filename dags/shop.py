@@ -11,8 +11,12 @@ with DAG(
     template_searchpath="/opt/airflow/dbt/shop",
 ) as dag:
 
+    # connection
     revenue = SQLExecuteQueryOperator(
         task_id="customer_revenue",
+        # makes airflow look for AIRFLOW_CONN_MYDB
+        # connection is in airflow because no dbt
         conn_id="mydb",
+        # table
         sql="customer_revenue.sql",
     )
