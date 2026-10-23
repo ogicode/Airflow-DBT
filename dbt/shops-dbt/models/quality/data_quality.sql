@@ -3,9 +3,9 @@
 -- step 1: compute every check as one row
 -- value = actual result, min/max = allowed range (null = no limit), severity = how bad a failure is
 with checks as (
-    -- customers: table must not be empty
+    -- customers: table must have between 1 and 100 rows
     select 'customers' as table_name, 'total rows' as check_name, count(*) as value,
-           1 as min_value, null::int as max_value, 'fail' as severity
+           1 as min_value, 100 as max_value, 'fail' as severity
     from {{ source('shop', 'customers') }}
     union all
     -- customers: count(name) skips nulls, so the difference = rows with no name
@@ -16,8 +16,12 @@ with checks as (
     select 'customers', 'duplicate customer_id', count(*) - count(distinct customer_id), 0, 0, 'fail'
     from {{ source('shop', 'customers') }}
     union all
-    -- orders: table must not be empty
-    select 'orders', 'total rows', count(*), 1, null, 'fail'
+    -- customers: names longer than 100 characters (likely bad input)
+    select 'customers', 'name too long', count(*) filter (where length(name) > 100), 0, 0, 'warn'
+    from {{ source('shop', 'customers') }}
+    union all
+    -- orders: table must have between 1 and 100 rows
+    select 'orders', 'total rows', count(*), 1, 100, 'fail'
     from {{ source('shop', 'orders') }}
     union all
     -- orders: rows with no amount
@@ -26,6 +30,11 @@ with checks as (
     union all
     -- orders: number of duplicate order ids
     select 'orders', 'duplicate order_id', count(*) - count(distinct order_id), 0, 0, 'fail'
+    from {{ source('shop', 'orders') }}
+    union all
+    -- orders: amount must be above 0 and at most 1 billion
+    -- count(*) filter counts only rows matching the condition
+    select 'orders', 'amount out of range', count(*) filter (where amount <= 0 or amount > 1000000000), 0, 0, 'fail'
     from {{ source('shop', 'orders') }}
 )
 
