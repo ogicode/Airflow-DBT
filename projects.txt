@@ -1,0 +1,4 @@
+simple sql transformation
+make project that looks at my yt feed scans transcripts
+and sends them to claude
+fedex project that talks to ai
